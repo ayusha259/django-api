@@ -1,0 +1,358 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "This is an assignment User server used for managing users data.",
+      "version": "1.0.0",
+      "title": "Django User API",
+      "contact": {
+        "email": "ayusha259@gmail.com"
+      }
+    },
+    "host": "django-users-api.herokuapp.com",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "users",
+        "description": "Operations on managing users"
+      }
+    ],
+    "schemes": [
+      "https"
+    ],
+    "paths": {
+      "/users": {
+        "post": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Create a new user",
+          "description": "This is used to create a new user using the data provided in the request body.",
+          "operationId": "createUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Created user object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "{}"
+            }
+          }
+        },
+        "get": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Get all the users with options",
+          "description": "This is used to query all the users from the database with pagination and variable response size. It also includes functionality such as sort and search by name.",
+          "operationId": "getAllUsers",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Page number you want to fetch",
+              "required": false,
+              "type": "integer"
+            },
+            {
+              "in": "query",
+              "name": "limit",
+              "description": "Limit the number of users in one page or response",
+              "required": false,
+              "type": "integer"
+            },
+            {
+              "in": "query",
+              "name": "name",
+              "description": "Search user by name as a substring in First Name or Last Name",
+              "type": "string",
+              "required": false
+            },
+            {
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "name": "sort",
+              "description": "Name of attribute, the items to be sorted. By default it will return in ascending order but by prefixing it with '-' it will return in decending order. Eg - '-age' and 'first_name'"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "{}",
+              "schema": {
+                "$ref": "#/definitions/AllUsers"
+              }
+            }
+          }
+        }
+      },
+      "/users/{user_id}": {
+        "get": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Get a user by User ID",
+          "description": "",
+          "operationId": "getUserById",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "description": "The ID that needs to be fetched. Use 502 for testing. ",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            "404": {
+              "description": "Not found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Updated a user",
+          "description": "This is done to update the existing user information.",
+          "operationId": "updateUser",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "description": "User ID that need to be updated",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Updated user object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserUpdate"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "{}"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Delete a user",
+          "description": "This is used to delete a particular user from the database.",
+          "operationId": "deleteUser",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "description": "The name that needs to be deleted",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "{}"
+            },
+            "404": {
+              "description": "User Not found"
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "petstore_auth": {
+        "type": "oauth2",
+        "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+        "flow": "implicit",
+        "scopes": {
+          "write:pets": "modify pets in your account",
+          "read:pets": "read your pets"
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      }
+    },
+    "definitions": {
+      "AllUsers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/User"
+        },
+        "example": [
+          {
+            "id": 3,
+            "first_name": "Art",
+            "last_name": "Venere",
+            "company_name": "Chemel, James L Cpa",
+            "city": "Bridgeport",
+            "state": "NJ",
+            "zip": 80514,
+            "email": "jart@venere.org",
+            "web": "http://www.chemeljameslcpa.com",
+            "age": 80
+          },
+          {
+            "id": 4,
+            "first_name": "Lenna",
+            "last_name": "Paprocki",
+            "company_name": "Feltz Printing Service",
+            "city": "Anchorage",
+            "state": "AK",
+            "zip": 99501,
+            "email": "lpaprocki@hotmail.com",
+            "web": "http://www.feltzprintingservice.com",
+            "age": 99
+          },
+          {
+            "id": 5,
+            "first_name": "Donette",
+            "last_name": "Foller",
+            "company_name": "Printing Dimentions",
+            "city": "Hamilton",
+            "state": "OH",
+            "zip": 45011,
+            "email": "donette.foller@cox.net",
+            "web": "http://www.printingdimensions.com",
+            "age": 45
+          },
+          {
+            "id": 6,
+            "first_name": "Simona",
+            "last_name": "Morasca",
+            "company_name": "Chapman, Ross E Esq",
+            "city": "Ashland",
+            "state": "OH",
+            "zip": 44805,
+            "email": "simona@morasca.com",
+            "web": "http://www.chapmanrosseesq.com",
+            "age": 44
+          },
+          {
+            "id": 7,
+            "first_name": "Mitsue",
+            "last_name": "Tollner",
+            "company_name": "Morlong Associates",
+            "city": "Chicago",
+            "state": "IL",
+            "zip\"": 60632,
+            "email": "mitsue_tollner@yahoo.com",
+            "web": "http://www.morlongassociates.com",
+            "age\"": 60
+          }
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 502
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Josephine"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Darakjy"
+          },
+          "company_name": {
+            "type": "string",
+            "example": "Chanay, Jeffrey A Esq"
+          },
+          "city": {
+            "type": "string",
+            "example": "Brighton"
+          },
+          "state": {
+            "type": "string",
+            "example": "MI"
+          },
+          "zip": {
+            "type": "integer",
+            "format": "int64",
+            "example": 48116
+          },
+          "email": {
+            "type": "string",
+            "uniqueItems": true,
+            "example": "josephine_darakjy@darakjy.org"
+          },
+          "web": {
+            "type": "string",
+            "example": "http://www.chanayjeffreyaesq.com"
+          },
+          "age": {
+            "type": "integer",
+            "format": "int64",
+            "example": 22
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "James"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Butt"
+          },
+          "age": {
+            "type": "integer",
+            "format": "int64",
+            "example": 32
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Find out more about Swagger",
+      "url": "http://swagger.io"
+    }
+  }
